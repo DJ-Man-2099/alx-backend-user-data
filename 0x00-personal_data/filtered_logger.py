@@ -2,7 +2,7 @@
 """First Task"""
 
 
-from os import environ
+from os import getenv
 import re
 from typing import List
 import logging
@@ -41,10 +41,10 @@ def get_logger() -> logging.Logger:
 
 def get_db() -> connection.MySQLConnection:
     """function that returns a database connection object"""
-    user = environ.get('PERSONAL_DATA_DB_USERNAME', 'root')
-    password = environ.get('PERSONAL_DATA_DB_PASSWORD', '')
-    host = environ.get('PERSONAL_DATA_DB_HOST', 'localhost')
-    db = environ.get('PERSONAL_DATA_DB_NAME')
+    user = getenv('PERSONAL_DATA_DB_USERNAME') or 'root'
+    password = getenv('PERSONAL_DATA_DB_PASSWORD') or ''
+    host = getenv('PERSONAL_DATA_DB_HOST') or 'localhost'
+    db = getenv('PERSONAL_DATA_DB_NAME')
     db_connection = connect(
         user=user,
         password=password,
