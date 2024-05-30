@@ -2,7 +2,7 @@
 """First Task"""
 
 
-import os
+from os import environ
 import re
 from typing import List
 import logging
@@ -40,19 +40,19 @@ def get_logger() -> logging.Logger:
 
 
 def get_db() -> connection.MySQLConnection:
-    """function that returns a database connection object"""
-    user = os.environ.get('PERSONAL_DATA_DB_USERNAME', 'root')
-    password = os.environ.get('PERSONAL_DATA_DB_PASSWORD', '')
-    host = os.environ.get('PERSONAL_DATA_DB_HOST', 'localhost')
-    db = os.environ.get('PERSONAL_DATA_DB_NAME')
-    db_connection = connection.MySQLConnection(
-        user=user,
+    """
+    Connect to mysql server with environmental vars
+    """
+    username = environ.get("PERSONAL_DATA_DB_USERNAME", "root")
+    password = environ.get("PERSONAL_DATA_DB_PASSWORD", "")
+    db_host = environ.get("PERSONAL_DATA_DB_HOST", "localhost")
+    db_name = environ.get("PERSONAL_DATA_DB_NAME")
+    connector = connection.MySQLConnection(
+        user=username,
         password=password,
-        host=host,
-        database=db
-    )
-    return db_connection
-    # return None
+        host=db_host,
+        database=db_name)
+    return connector
 
 
 class RedactingFormatter(logging.Formatter):
