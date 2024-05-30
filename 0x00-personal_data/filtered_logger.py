@@ -2,9 +2,11 @@
 """First Task"""
 
 
+import os
 import re
 from typing import List
 import logging
+from mysql.connector import connect
 
 PII_FIELDS = ('name', 'email',
               'phone',
@@ -35,6 +37,22 @@ def get_logger() -> logging.Logger:
     logger.addHandler(handler)
     # print(logger)
     return logger
+
+
+def get_db() -> object:
+    """function that returns a database connection object"""
+    user = os.environ.get('PERSONAL_DATA_DB_USERNAME', 'root')
+    password = os.environ.get('PERSONAL_DATA_DB_PASSWORD', '')
+    host = os.environ.get('PERSONAL_DATA_DB_HOST', 'localhost')
+    db = os.environ.get('PERSONAL_DATA_DB_NAME', 'my_db')
+    connection = connect(
+        user=user,
+        password=password,
+        host=host,
+        database=db
+    )
+    return connection
+    # return None
 
 
 class RedactingFormatter(logging.Formatter):
