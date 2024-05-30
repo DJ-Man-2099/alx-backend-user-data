@@ -2,11 +2,11 @@
 """First Task"""
 
 
-import os
+from os import environ
 import re
 from typing import List
 import logging
-import mysql.connector
+from mysql.connector import connect, connection
 
 PII_FIELDS = ('name', 'email',
               'phone',
@@ -39,19 +39,19 @@ def get_logger() -> logging.Logger:
     return logger
 
 
-def get_db() -> mysql.connector.connection.MySQLConnection:
-    """ Implement db conectivity
-    """
-    psw = os.environ.get("PERSONAL_DATA_DB_PASSWORD", "")
-    username = os.environ.get('PERSONAL_DATA_DB_USERNAME', "root")
-    host = os.environ.get('PERSONAL_DATA_DB_HOST', 'localhost')
-    db_name = os.environ.get('PERSONAL_DATA_DB_NAME')
-    conn = mysql.connector.connect(
+def get_db() -> connection.MySQLConnection:
+    """function that returns a database connection object"""
+    user = environ.get('PERSONAL_DATA_DB_USERNAME', 'root')
+    password = environ.get('PERSONAL_DATA_DB_PASSWORD', '')
+    host = environ.get('PERSONAL_DATA_DB_HOST', 'localhost')
+    db = environ.get('PERSONAL_DATA_DB_NAME')
+    db_connection = connect(
+        user=user,
+        password=password,
         host=host,
-        database=db_name,
-        user=username,
-        password=psw)
-    return conn
+        database=db
+    )
+    return db_connection
 
 
 def main():
