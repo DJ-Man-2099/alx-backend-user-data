@@ -8,7 +8,7 @@ import logging
 
 PII_FIELDS = ('name', 'email',
               'phone',
-              'ssn', 'password',
+              'ssn', 'password'
               #   'ip',
               # 'last_login', 'user_agent'
               )
