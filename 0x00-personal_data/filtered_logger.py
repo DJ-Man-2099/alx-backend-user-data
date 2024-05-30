@@ -54,6 +54,28 @@ def get_db() -> connection.MySQLConnection:
     return db_connection
 
 
+def main():
+    """obtain a database connection using get_db
+    and retrieve all rows in the users table
+    and display each row under a filtered format like this"""
+    attribs = [
+        'name', 'email', 'phone',
+        'ssn', 'password', 'ip',
+        'last_login', 'user_agent'
+    ]
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM users;")
+    logger = get_logger()
+    for row in cursor:
+        msg = "; ".join([f"{attrib}={str(row[i])}"
+                         for i, attrib in enumerate(attribs)])
+        msg += ";"
+        logger.info(msg)
+    cursor.close()
+    db.close()
+
+
 class RedactingFormatter(logging.Formatter):
     """ Redacting Formatter class
         """
@@ -74,3 +96,8 @@ class RedactingFormatter(logging.Formatter):
         record.asctime = self.formatTime(record, self.datefmt)
         return self.formatMessage(record)
         # NotImplementedError
+
+
+if __name__ == "__main__":
+    """Main Executable"""
+    main()
