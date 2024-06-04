@@ -65,12 +65,11 @@ class BasicAuth(Auth):
         if not users:
             return None
 
-        current_user = users[0]
+        for current_user in users:
+            if current_user.is_valid_password(user_pwd):
+                return current_user
 
-        if not current_user.is_valid_password(user_pwd):
-            return None
-
-        return current_user
+        return None
 
     # def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
     #     """ returns False """
