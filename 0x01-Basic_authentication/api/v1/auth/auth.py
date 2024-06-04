@@ -2,7 +2,6 @@
 """ Authentication Management Class """
 
 from typing import List, TypeVar
-import flask
 
 User = TypeVar('User')
 

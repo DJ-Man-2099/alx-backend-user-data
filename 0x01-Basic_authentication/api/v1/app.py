@@ -18,10 +18,15 @@ app.debug = True
 auth = None
 
 AUTH_TYPE = getenv("AUTH_TYPE")
+BASIC_AUTH = 'basic_auth'
 
 if AUTH_TYPE:
-    from api.v1.auth.auth import Auth
-    auth = Auth()
+    if AUTH_TYPE == BASIC_AUTH:
+        from api.v1.auth.basic_auth import BasicAuth
+        auth = BasicAuth()
+    else:
+        from api.v1.auth.auth import Auth
+        auth = Auth()
 
 excluded_paths = ['/api/v1/status/',
                   '/api/v1/unauthorized/',
