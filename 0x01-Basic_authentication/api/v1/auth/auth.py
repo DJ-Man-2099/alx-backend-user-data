@@ -17,7 +17,8 @@ class Auth:
 
         return path is None \
             or not excluded_paths \
-            or not any(map(lambda p:not not re.match(p, path), excluded_paths))
+            or not any(map(lambda p: not not re.match(p, path),
+                           excluded_paths))
 
     def authorization_header(self, request=None) -> str:
         """ returns None """
