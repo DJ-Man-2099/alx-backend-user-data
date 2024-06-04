@@ -58,18 +58,20 @@ class BasicAuth(Auth):
             user_pwd and isinstance(user_pwd, str)
         )):
             return None
+        try:
+            users = models.user.User.search({
+                "email": user_email,
+            })
+            if not users:
+                return None
 
-        users = models.user.User.search({
-            "email": user_email,
-        })
-        if not users:
+            for current_user in users:
+                if current_user.is_valid_password(user_pwd):
+                    return current_user
+
             return None
-
-        for current_user in users:
-            if current_user.is_valid_password(user_pwd):
-                return current_user
-
-        return None
+        except Exception:
+            return None
 
     # def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
     #     """ returns False """
