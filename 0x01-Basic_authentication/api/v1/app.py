@@ -15,6 +15,30 @@ CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 
 app.debug = True
 
+auth = None
+
+AUTH_TYPE = getenv("AUTH_TYPE")
+
+if AUTH_TYPE:
+    from api.v1.auth.auth import Auth
+    auth = Auth()
+
+excluded_paths = ['/api/v1/status/',
+                  '/api/v1/unauthorized/',
+                  '/api/v1/forbidden/']
+
+
+@app.before_request
+def auth_request():
+    """ Auth Handler """
+    if auth:
+        path = request.path
+        if auth.require_auth(path, excluded_paths):
+            if not auth.authorization_header(request):
+                abort(401)
+            if not auth.current_user(request):
+                abort(403)
+
 
 @app.errorhandler(404)
 def not_found(error) -> str:

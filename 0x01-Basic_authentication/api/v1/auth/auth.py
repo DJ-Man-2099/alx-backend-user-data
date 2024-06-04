@@ -2,6 +2,7 @@
 """ Authentication Management Class """
 
 from typing import List, TypeVar
+import flask
 
 User = TypeVar('User')
 
@@ -20,7 +21,10 @@ class Auth:
 
     def authorization_header(self, request=None) -> str:
         """ returns None """
-        return None
+        HEADER = 'Authorization'
+        if not request:
+            return None
+        return request.headers.get(HEADER)
 
     def current_user(self, request=None) -> User:
         """ returns None """
