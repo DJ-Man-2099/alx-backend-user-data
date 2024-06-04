@@ -18,7 +18,8 @@ class Auth:
         return path is None \
             or not excluded_paths \
             or not any(map(lambda p:
-                           (p[-1] == "*" and path.startswith(p[:-1]))
+                           (p[-1] == "*" and
+                            re.match("^" + re.escape(p[:-1]), path))
                            or p == path, excluded_paths))
 
     def authorization_header(self, request=None) -> str:
