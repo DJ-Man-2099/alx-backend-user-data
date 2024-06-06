@@ -40,13 +40,11 @@ class SessionDBAuth(SessionExpAuth):
             user_sessions = UserSession.search({"session_id": session_id})
         except Exception:
             return None
+        exp_user_id = super().user_id_for_session_id(session_id)
         if not user_sessions:
             return None
-        cur_time = datetime.now()
-        time_span = timedelta(seconds=self.session_duration)
-        exp_time = user_sessions[0].created_at + time_span
-        if exp_time < cur_time:
-            return None
+        if exp_user_id and exp_user_id == user_sessions[0].user_id:
+            return user_sessions[0].user_id
 
         return None
 
