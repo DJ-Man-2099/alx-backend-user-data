@@ -40,24 +40,20 @@ class SessionDBAuth(SessionExpAuth):
             user_sessions = UserSession.search({"session_id": session_id})
         except Exception:
             return None
+        exp_user_id = self.user_id_by_session_id[session_id]
         if not user_sessions:
             return None
-        user = self.user_id_by_session_id.get(session_id)
-        if user is None:
+        if not exp_user_id:
             super().create_session(user_sessions[0].user_id)
+        else:
+            created_at = exp_user_id.get("created_at")
+            if created_at:
+                session_end = created_at + timedelta(seconds=self.session_duration)
+                if session_end < datetime.now():
+                    return None
+                return user_sessions[0].user_id
 
-        user_id = user.get("user_id")
-        if self.session_duration <= 0:
-            return user_id
-
-        created_at = user.get("created_at")
-        if created_at is None:
-            return None
-
-        session_end = created_at + timedelta(seconds=self.session_duration)
-        if session_end < datetime.now():
-            return None
-        return user_sessions[0].user_id
+        return None
 
     def destroy_session(self, request=None):
         """ that destroys the UserSession
