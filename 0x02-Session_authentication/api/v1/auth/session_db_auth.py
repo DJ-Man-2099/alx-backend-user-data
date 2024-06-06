@@ -36,7 +36,10 @@ class SessionDBAuth(SessionExpAuth):
         if session_id is None:
             return None
 
-        user_sessions = UserSession.search({"session_id": session_id})
+        try:
+            user_sessions = UserSession.search({"session_id": session_id})
+        except Exception:
+            return None
         exp_user_id = super().user_id_for_session_id(session_id)
         if not user_sessions:
             return None
@@ -53,7 +56,11 @@ class SessionDBAuth(SessionExpAuth):
         if not super().destroy_session(request):
             return False
 
-        user_sessions = UserSession.search({"session_id": session_id})
+        try:
+            user_sessions = UserSession.search({"session_id": session_id})
+        except Exception:
+            return False
+
         if not user_sessions:
             return False
         user_sessions[0].remove()
