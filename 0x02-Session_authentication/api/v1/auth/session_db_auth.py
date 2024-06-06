@@ -38,6 +38,9 @@ class SessionDBAuth(SessionExpAuth):
 
         try:
             user_sessions = UserSession.search({"session_id": session_id})
+            exp_user_session = super().user_id_for_session_id(session_id)
+            if exp_user_session is None:
+                return None
         except Exception:
             return None
 
@@ -47,9 +50,6 @@ class SessionDBAuth(SessionExpAuth):
         """ that destroys the UserSession
         based on the Session ID from the request cookie """
         session_id = super().session_cookie(request)
-
-        if session_id is None:
-            return False
 
         try:
             user_sessions = UserSession.search({"session_id": session_id})
