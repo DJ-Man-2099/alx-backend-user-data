@@ -25,7 +25,6 @@ class SessionDBAuth(SessionExpAuth):
 
         return session_id
 
-
     def user_id_for_session_id(self, session_id=None):
         """that returns the User ID
         by requesting UserSession in the database based on session_id"""
@@ -35,12 +34,8 @@ class SessionDBAuth(SessionExpAuth):
 
         user_sessions = UserSession.search({"session_id": session_id})
         exp_user_id = super().user_id_for_session_id(session_id)
-        if exp_user_id:
-            if exp_user_id == user_sessions[0].user_id:
-                return user_sessions[0].user_id
-            else:
-                del user_sessions[0]
-                return None
+        if exp_user_id and exp_user_id == user_sessions[0].user_id:
+            return user_sessions[0].user_id
 
     def destroy_session(self, request=None):
         """ that destroys the UserSession
