@@ -2,10 +2,10 @@
 """ User module
 """
 import hashlib
-from models.user import User
+from models.base import Base
 
 
-class UserSession(User):
+class UserSession(Base):
     """ UserSession class
     """
 
