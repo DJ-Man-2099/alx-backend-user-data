@@ -53,7 +53,7 @@ class SessionDBAuth(SessionExpAuth):
         based on the Session ID from the request cookie """
         session_id = self.session_cookie(request)
 
-        super().destroy_session(request)
+        # super().destroy_session(request)
 
         try:
             user_sessions = UserSession.search({"session_id": session_id})
