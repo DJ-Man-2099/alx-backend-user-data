@@ -44,7 +44,7 @@ class SessionDBAuth(SessionExpAuth):
             return None
         user = self.user_id_by_session_id.get(session_id)
         if user is None:
-            super().create_session(session_id)
+            super().create_session(user_sessions[0].user_id)
 
         user_id = user.get("user_id")
         if self.session_duration <= 0:
