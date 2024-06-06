@@ -20,6 +20,8 @@ auth = None
 AUTH_TYPE = getenv("AUTH_TYPE")
 BASIC_AUTH = 'basic_auth'
 SESSION_AUTH = 'session_auth'
+SESSION_EXP_AUTH = 'session_exp_auth'
+SESSION_DB_AUTH = 'session_db_auth'
 
 if AUTH_TYPE:
     if AUTH_TYPE == BASIC_AUTH:
@@ -28,6 +30,12 @@ if AUTH_TYPE:
     elif AUTH_TYPE == SESSION_AUTH:
         from api.v1.auth.session_auth import SessionAuth
         auth = SessionAuth()
+    elif AUTH_TYPE == SESSION_EXP_AUTH:
+        from api.v1.auth.session_exp_auth import SessionExpAuth
+        auth = SessionExpAuth()
+    elif AUTH_TYPE == SESSION_DB_AUTH:
+        from api.v1.auth.session_db_auth import SessionDBAuth
+        auth = SessionDBAuth()
     else:
         from api.v1.auth.auth import Auth
         auth = Auth()
