@@ -45,6 +45,9 @@ class SessionDBAuth(SessionExpAuth):
             return None
         if exp_user_id and exp_user_id == user_sessions[0].user_id:
             return user_sessions[0].user_id
+        elif exp_user_id is None:
+            super().create_session(user_sessions[0].user_id)
+            return user_sessions[0].user_id
 
         return None
 
