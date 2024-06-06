@@ -43,15 +43,8 @@ class SessionDBAuth(SessionExpAuth):
         exp_user_id = self.user_id_by_session_id[session_id]
         if not user_sessions:
             return None
-        if not exp_user_id:
-            super().create_session(user_sessions[0].user_id)
-        else:
-            created_at = exp_user_id.get("created_at")
-            if created_at:
-                session_end = created_at + timedelta(seconds=self.session_duration)
-                if session_end < datetime.now():
-                    return None
-                return user_sessions[0].user_id
+        if exp_user_id and exp_user_id == user_sessions[0].user_id:
+            return user_sessions[0].user_id
 
         return None
 
