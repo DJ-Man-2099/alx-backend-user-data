@@ -37,6 +37,8 @@ class SessionDBAuth(SessionExpAuth):
         if exp_user_id and exp_user_id == user_sessions[0].user_id:
             return user_sessions[0].user_id
 
+        return None
+
     def destroy_session(self, request=None):
         """ that destroys the UserSession
         based on the Session ID from the request cookie """
