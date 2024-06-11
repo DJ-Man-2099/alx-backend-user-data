@@ -44,8 +44,10 @@ class DB:
         as filtered by the method’s input arguments """
         try:
             result = self._session.query(User).filter_by(**kwargs).first()
-        except Exception:
-            raise InvalidRequestError
+        except InvalidRequestError:
+            raise
+
         if result is None:
             raise NoResultFound
+
         return result
