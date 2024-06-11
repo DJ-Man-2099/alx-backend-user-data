@@ -5,6 +5,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
+from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.exc import InvalidRequestError
 
 from user import Base, User
 
@@ -33,10 +35,8 @@ class DB:
     def add_user(self, email: str, hashed_password: str) -> TypeVar("User"):
         """ save the user to the database """
         if not (email and hashed_password):
-            return None
-        user = User()
-        user.email = email
-        user.hashed_password = hashed_password
+            raise InvalidRequestError()
+        user = User(email=email, hashed_password=hashed_password)
         self._session.add(user)
         self._session.commit()
         return user
