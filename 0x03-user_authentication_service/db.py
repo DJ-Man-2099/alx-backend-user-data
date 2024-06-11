@@ -32,7 +32,7 @@ class DB:
     def add_user(self, email: str, hashed_password: str) -> User:
         """add a new user to the db"""
         if not email or not hashed_password:
-            raise ValueError("email and hashed_password are required")
+            return None
         new_user = User(email=email, hashed_password=hashed_password)
         session = self._session
         session.add(new_user)
