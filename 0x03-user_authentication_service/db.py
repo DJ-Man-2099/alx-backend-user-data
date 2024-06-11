@@ -20,12 +20,6 @@ class DB:
         Base.metadata.create_all(self._engine)
         self.__session = None
 
-    def __getattribute__(self, name: str):
-        """ setting _session to not access """
-        if name == "_session":
-            raise AttributeError
-        return super().__getattribute__(name)
-
     @property
     def _session(self) -> Session:
         """Memoized session object
