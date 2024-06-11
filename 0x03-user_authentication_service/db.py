@@ -20,6 +20,12 @@ class DB:
         Base.metadata.create_all(self._engine)
         self.__session = None
 
+    def __getattribute__(self, name: str):
+        """ setting _session to not access """
+        if name == "_session":
+            raise AttributeError
+        return super().__getattribute__(name)
+
     @property
     def _session(self) -> Session:
         """Memoized session object
@@ -31,6 +37,8 @@ class DB:
 
     def add_user(self, email: str, hashed_password: str) -> User:
         """ save the user to the database """
+        if not (email and hashed_password):
+            return None
         user = User(email=email, hashed_password=hashed_password)
         self._session.add(user)
         self._session.commit()
