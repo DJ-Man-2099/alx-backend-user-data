@@ -14,7 +14,7 @@ class DB:
     """DB class
     """
 
-    def init(self) -> None:
+    def __init__(self) -> None:
         """Initialize a new DB instance
         """
         self._engine = create_engine("sqlite:///a.db", echo=True)
@@ -35,9 +35,8 @@ class DB:
         """add a new user to the db"""
         if not email or not hashed_password:
             raise InvalidRequestError
-        new_user = User()
-        new_user.email = email
-        new_user.hashed_password = hashed_password
-        self._session.add(new_user)
-        self._session.commit()
+        new_user = User(email=email, hashed_password=hashed_password)
+        session = self._session
+        session.add(new_user)
+        session.commit()
         return new_user
