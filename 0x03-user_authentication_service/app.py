@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """ flask Module """
 
-from flask import Flask, jsonify, request, abort
+from flask import Flask, jsonify, request, abort ,redirect
+from sqlalchemy.orm.exc import NoResultFound
 from auth import Auth
 
 AUTH = Auth()
@@ -41,6 +42,21 @@ def login() -> str:
     response = jsonify({"email": email, "message": "logged in"})
     response.set_cookie("session_id", session_id)
     return response
+
+
+@app.route("/sessions", methods=["DELETE"], strict_slashes=False)
+def logout() -> str:
+    """ Find the user with the requested session ID.
+    If the user exists destroy the session and redirect the user to GET /.
+    If the user does not exist, respond with a 403 HTTP status. """
+    try:
+        session_id = request.cookies.get("session_id")
+        user = AUTH.get_user_from_session_id(session_id)
+        AUTH.destroy_session(user.id)
+        return redirect("/")
+    except NoResultFound:
+        return jsonify({}), 403
+
 
 
 if __name__ == "__main__":
