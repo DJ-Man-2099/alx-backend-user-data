@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """ flask Module """
 
-from flask import Flask, jsonify, request, abort ,redirect
+from flask import Flask, jsonify, request, abort, redirect
 from sqlalchemy.orm.exc import NoResultFound
 from auth import Auth
 
@@ -56,7 +56,6 @@ def logout() -> str:
         return redirect("/")
     except NoResultFound:
         abort(403)
-
 
 
 if __name__ == "__main__":
