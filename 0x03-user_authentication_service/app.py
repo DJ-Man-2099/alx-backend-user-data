@@ -55,7 +55,7 @@ def logout() -> str:
         AUTH.destroy_session(user.id)
         return redirect("/")
     except NoResultFound:
-        return jsonify({}), 403
+        abort(403)
 
 
 
